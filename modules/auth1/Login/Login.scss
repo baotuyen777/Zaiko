@@ -1,0 +1,76 @@
+.login-form{
+	position:absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding-top: 200px;
+    background-color:#eee;
+    background: url(images/bg.jpg) no-repeat top center fixed;
+    background-size: cover;
+    .login-box{
+        background-color: #fff;
+        box-shadow: 0 1px 10px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+        border-radius: 4px;
+        text-align: left;
+        padding: 20px;
+        width: 450px;
+        min-height: 320px;
+        border: 1px solid #ddd;
+        .login-header{
+            margin-top: 15px;
+            border-bottom: 2px #ccc solid;
+            padding-left: 25px;
+            padding-bottom: 25px;
+            color: #000;
+        }
+        a{
+            padding-left: 20px;
+        }
+    }
+}
+.error{
+    color: red;
+}
+.success{
+    color: green;
+}
+
+/* Portrait tablet to landscape and desktop */
+@media (max-width: 1200px) { 
+    .login-form{
+        padding-top: 150px;
+        
+    }
+}
+/* Portrait tablet to landscape and desktop */
+@media (max-width: 999px) { 
+    .login-form{
+        padding-top: 20%;
+        .login-box{
+            width: 60%;
+            margin: 0 auto;
+        }
+    }
+}
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) {
+    .login-form{
+        position:static;
+        padding-top: 35%;
+        padding-bottom: 150px;
+        .login-box{
+            width: 70%;
+        }
+    }
+}
+ 
+/* Landscape phones and down */
+@media (max-width: 480px) {
+  .login-form{
+         padding-bottom: 220px;
+        .login-box{
+            width: 95%;
+        }
+    }
+}
