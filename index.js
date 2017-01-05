@@ -18,7 +18,7 @@ render(
       <Route path="/" component={Layout}>
         <IndexRoute component={auth.Login} />
         <Route path="logout" component={auth.Logout} />
-        <Route path="product/" component={product.List} >
+        <Route path="product/"  >
           <IndexRoute component={product.List} />
           <Route path="list" component={product.List}></Route>
           <Route path="add" component={product.Add}></Route>

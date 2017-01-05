@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { browserHistory } from 'react-router';
 import { connect } from 'react-redux'
 import { sendDataLogin } from '../../redux/actions/auth'
 
@@ -30,8 +31,7 @@ class Login extends Component {
             } else {
                 console.error("your browser not support localStorage");
             }
-            // var Router = require('react-router');
-            // Router.browserHistory.push('/todos');
+            browserHistory.push('/product/list');
         }
 
         if (login.type === "LOGIN_FAIL") {
@@ -105,6 +105,6 @@ function mapDispatchToProps(dispatch) {
 export default connect(
     (state, ownProps) => ({
         auth: state.auth,
-    })  ,
+    }),
     mapDispatchToProps
 )(Login)

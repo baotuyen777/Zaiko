@@ -1,14 +1,19 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getAllProduct, deleteProduct } from '../../redux/actions/product'
+import { getAllProduct, deleteProduct, createProduct } from '../../redux/actions/product'
 
 class Add extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            data: null,
+            object: {
+                name: '',
+                price: ''
+            },
+            file: '',
+            imagePreviewUrl: '',
             isLoading: false,
-            isDisabled: ''
+            isEdit: ''
         }
     }
     componentWillMount() {
@@ -16,7 +21,7 @@ class Add extends Component {
             // date:
         }
         console.log(this.props)
-        this.props.onGetAllProduct(params);
+        // this.props.onGetAllProduct(params);
     }
     componentWillReceiveProps(props) {
         const {listProduct} = props.product;
@@ -27,23 +32,47 @@ class Add extends Component {
 
         }
 
-        if (listProduct.type === "PRODUCT_ALL_FAIL") {
-            alert('load data fail');
-        }
+        // if (listProduct.type === "PRODUCT_ALL_FAIL") {
+        //     alert('load data fail');
+        // }
         this.setState({ isLoading: false });
     }
-    onDelete(id) {
-        if (!id) {
-            alert({ notice: 'ID invalid' });
+    onChange(e) {
+        let object = this.state.object;
+        object[e.target.name] = e.target.value
+        this.setState({ object });
+    }
+    onSubmit(e) {
+        e.preventDefault();
+        let {name, price, category, description, img} = this.state.object;
+        if (!name || !price || !category || !description || !img) {
+            alert('data not null');
             return;
         }
-        var r = confirm("Are you sure ?");
-        if (r) {
-            this.props.onDelele(id);
-            this.setState({ isLoading: true });
+        this.props.onCreate(this.state.object);
+        console.log(this.state.object)
+    }
+
+    onChangeImage(e) {
+        e.preventDefault();
+
+        let reader = new FileReader();
+        let file = e.target.files[0];
+        console.log(file.name);
+        reader.onloadend = () => {
+            this.setState({
+                file: file,
+                imagePreviewUrl: reader.result
+            });
         }
+        let object = this.state.object;
+        object[e.target.name] = file.name
+        this.setState({ object });
+
+        reader.readAsDataURL(file)
     }
     renderForm() {
+
         if (this.state.data === null) {
             return (
                 <div >
@@ -55,26 +84,63 @@ class Add extends Component {
                 </div>
             );
         }
+        //   {this.notice(this.state.updateStatus, this.state.noticeText)}
+        let {name, price, category, description, img} = this.state.object;
+        let {imagePreviewUrl} = this.state;
+        let $imagePreview = null;
+        if (imagePreviewUrl) {
+            $imagePreview = (<img style={{ height: 100 }} src={imagePreviewUrl} />);
+        }
         return (
             <div>
-                {this.notice(this.state.updateStatus, this.state.noticeText)}
-                <form className="form-horizontal">
+
+                <form className="form-horizontal" onSubmit={(e) => this.onSubmit(e)}>
                     <div className="form-group">
-                        <label className="control-label col-sm-2" for="email">Email:</label>
+                        <label className="control-label col-sm-2">Name:</label>
                         <div className="col-sm-10">
-                            <input type="email" className="form-control" id="email" placeholder="Enter email" />
+                            <input name='name' type="text" className="form-control" placeholder="Name"
+                                value={name} onChange={(e) => this.onChange(e)} />
                         </div>
                     </div>
                     <div className="form-group">
-                        <label className="control-label col-sm-2" for="pwd">Password:</label>
+                        <label className="control-label col-sm-2">Price:</label>
                         <div className="col-sm-10">
-                            <input type="password" className="form-control" id="pwd" placeholder="Enter password" />
+                            <input name='price' type="number" className="form-control" placeholder="Price"
+                                value={price} onChange={(e) => this.onChange(e)}
+                                />
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label className="control-label col-sm-2" >Category:</label>
+                        <div className="col-sm-10">
+                            <select name="category" className="form-control"
+                                value={category} onChange={(e) => this.onChange(e)}
+                                >
+                                <option value={1}>1</option>
+                                <option value={2}>2</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label className="control-label col-sm-2">Description:</label>
+                        <div className="col-sm-10">
+                            <textArea name="description" className="form-control"
+                                onChange={(e) => this.onChange(e)}>{description}</textArea>
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label className="control-label col-sm-2" >Image :</label>
+                        <div className="col-sm-10">
+                            <input type="file" name='img' className="form-control" onChange={(e) => this.onChangeImage(e)} />
+                            <div >
+                                {$imagePreview}
+                            </div>
                         </div>
                     </div>
                     <div className="form-group">
                         <div className="col-sm-offset-2 col-sm-10">
                             <div className="checkbox">
-                                <label><input type="checkbox" /> Remember me</label>
+                                <label><input type="checkbox" /> Activate   </label>
                             </div>
                         </div>
                     </div>
@@ -95,8 +161,8 @@ class Add extends Component {
                 <div className="container">
 
                     <h1 className="text-center">Product</h1>
-                    <button className="btn btn-success" onClick={() => this.onDelete(object.productId)}>
-                        <i className="fa fa-trash" aria-hidden="true"></i> Add new</button>
+                    <button className="btn btn-default" onClick={() => this.onDelete(object.productId)}>
+                        <i className="fa fa-reply" aria-hidden="true"></i> List</button>
                     {this.renderForm(this)}
                 </div>
             </div>
@@ -108,6 +174,7 @@ function mapDispatchToProps(dispatch) {
         onSendDataLogin: (email, password) => dispatch(sendDataLogin.bind(null, email, password)),
         onGetAllProduct: (params) => dispatch(getAllProduct.bind(null, params)),
         onDelele: (params) => dispatch(deleteProduct.bind(null, params)),
+        onCreate: (params) => dispatch(createProduct.bind(null, params)),
     }
 }
 

@@ -6,7 +6,9 @@ export const sendDataLogin = (email, password, dispatch, state) => {
     password,
   }
  
-  Services.post(url, param,
+  Services.post(
+    url,
+    param,
     res => dispatch({ type: 'LOGIN_SUCCESS', data: res }),
     res => dispatch({ type: 'LOGIN_FAIL', data: res }),
     err => console.log(err));
