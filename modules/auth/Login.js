@@ -60,8 +60,8 @@ class Login extends Component {
         return (
             <form className="form-horizontal">
                 <div className="form-group">
-                    <label htmlFor="exampleInputEmail1">User name:</label>
-                    <input type="email" className="form-control" id="exampleInputEmail1" placeholder="User Name" value={this.state.email}
+                    <label htmlFor="exampleInputEmail1">Email:</label>
+                    <input type="email" className="form-control" id="exampleInputEmail1" placeholder="Email" value={this.state.email}
                         onChange={(e) => this.setState({ email: e.target.value })}
                         />
                 </div>

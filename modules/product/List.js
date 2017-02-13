@@ -11,6 +11,7 @@ class List extends Component {
             isLoading: false,
             isDisabled: ''
         }
+        console.log(JSON.stringify({1:3, 2:4}));
     }
     componentWillMount() {
         let params = {
@@ -22,8 +23,9 @@ class List extends Component {
     componentWillReceiveProps(props) {
         const {listProduct} = props.product;
         if (listProduct.type === "PRODUCT_ALL_SUCCESS") {
+            // console.log(props);return;
             this.setState({
-                data: listProduct.data.data.data,
+                data: listProduct.data.data,
             });
 
         }
@@ -70,9 +72,9 @@ class List extends Component {
                     {this.state.data.map((object, index) =>
                         <tr key={index}>
                             <td>{index}</td>
-                            <td>{object.productName}</td>
-                            <td>{object.productPrice}</td>
-                            <td><button onClick={() => this.onDelete(object.productId)}><i className="fa fa-trash" aria-hidden="true"></i></button></td>
+                            <td>{object.name}</td>
+                            <td>{object.price}</td>
+                            <td><button onClick={() => this.onDelete(object.id) }><i className="fa fa-trash" aria-hidden="true"></i></button></td>
                         </tr>
                     )
                     }
@@ -88,9 +90,11 @@ class List extends Component {
                 <div className="container">
 
                     <h1 className="text-center">Product</h1>
-                    <button className="btn btn-success" onClick={() => browserHistory.push('/product/add')}>
-                        <i className="fa fa-trash" aria-hidden="true"></i> Add new</button>
-                    {this.renderList(this)}
+                    <div className="action">
+                        <button className="btn btn-success" onClick={() => browserHistory.push('/product/add') }>
+                            <i className="fa fa-plus" aria-hidden="true"></i> Add new </button>
+                    </div>
+                    {this.renderList(this) }
                 </div>
             </div>
         )

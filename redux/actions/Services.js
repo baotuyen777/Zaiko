@@ -1,13 +1,13 @@
 import 'whatwg-fetch';
 // import ApiUrl from './ApiUrl'
 //contain common service 
-const ApiUrl = 'http://192.168.2.87/zaiko/public/api/v1/';
+const ApiUrl = 'http://192.168.1.87/nanoAPI/';
 class Services {
     constructor(url) {
         this.serviceUrl = url;
         const user = JSON.parse(localStorage.getItem("authZ")) || null;
         if (user != null) {
-            this.token = "Bearer " + user.token;
+            this.token =  user.token;
         }
     }
 
@@ -42,13 +42,14 @@ class Services {
     get(url, success, failed, error) {
         const user = JSON.parse(localStorage.getItem("authZ")) || null;
         if (user != null) {
-            this.token = 'Bearer ' + user.token;
+            this.token =  user.token;
         }
         fetch(ApiUrl + url, {
             method: 'get',
             headers: {
                 'Accept': 'application/json',
-                'Authorization': this.token,
+                'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8',
+                'token': this.token,
             },
         }).then((response) => {
             return response.json();

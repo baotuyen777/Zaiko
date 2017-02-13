@@ -1,6 +1,6 @@
 export default new class ApiUrl {
     get baseUrl() {
-        return 'http://192.168.2.87/zaiko/public/api/v1/';
+        return 'http://localhost/nanoAPI/';
     }
 
 

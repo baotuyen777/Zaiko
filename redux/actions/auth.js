@@ -1,11 +1,11 @@
-import Services from './Services'
+import Services from './Services';
+let entity = 'auth';
 export const sendDataLogin = (email, password, dispatch, state) => {
-  let url = "authenticate";
+  let url = entity + "/login";
   let param = {
     email,
     password,
   }
- 
   Services.post(
     url,
     param,
