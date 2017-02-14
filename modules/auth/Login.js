@@ -20,13 +20,13 @@ class Login extends Component {
     componentWillReceiveProps(props) {
         const {login} = props.auth
         if (login.type === "LOGIN_SUCCESS") {
-            const {token, data: {id, name, email, img}} = login.data;
+            const {token, data: {id, name, email, image,role,status}} = login.data;
             this.setState({
                 notice: 'login successfully',
                 color: { color: 'green' }
             });
             if (typeof (Storage) !== "undefined") {
-                let dataStorage = { token, id, email, name, img }
+                let dataStorage = { token, id, email, name, image,role,status }
                 localStorage.setItem("authZ", JSON.stringify(dataStorage));
             } else {
                 console.error("your browser not support localStorage");

@@ -1,8 +1,8 @@
-import Login from './Login';
-import Logout from './Logout';
+import List from './List';
+import Add from './Add';
 //import  ChangePassword from './ChangePassword';
 module.exports = {
-    Login,
-    Logout,
+    List,
+    Add,
     //    ChangePassword
 };
