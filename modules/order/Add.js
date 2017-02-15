@@ -160,7 +160,7 @@ class Add extends Component {
             <div>
                 <div className="container">
 
-                    <h1 className="text-center">Product</h1>
+                    <h1 className="text-center">Order</h1>
                     <button className="btn btn-default" onClick={() => this.onDelete(object.productId)}>
                         <i className="fa fa-reply" aria-hidden="true"></i> List</button>
                     {this.renderForm(this)}

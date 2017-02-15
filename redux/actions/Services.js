@@ -1,13 +1,13 @@
 import 'whatwg-fetch';
 // import ApiUrl from './ApiUrl'
 //contain common service 
-const ApiUrl = 'http://192.168.1.87/nanoAPI/';
+const ApiUrl = 'http://192.168.2.87/nanoAPI/';
 class Services {
     constructor(url) {
         this.serviceUrl = url;
         const user = JSON.parse(localStorage.getItem("authZ")) || null;
         if (user != null) {
-            this.token =  user.token;
+            this.token = user.token;
         }
     }
 
@@ -17,7 +17,7 @@ class Services {
             method: 'delete',
             headers: {
                 'Accept': 'application/json',
-                'Authorization': this.token,
+                'token': this.token,
             },
         }).then(function (request) {
 
@@ -42,13 +42,13 @@ class Services {
     get(url, success, failed, error) {
         const user = JSON.parse(localStorage.getItem("authZ")) || null;
         if (user != null) {
-            this.token =  user.token;
+            this.token = user.token;
         }
         fetch(ApiUrl + url, {
             method: 'get',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8',
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
                 'token': this.token,
             },
         }).then((response) => {
@@ -79,7 +79,7 @@ class Services {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Authorization': this.token,
+                'token': this.token,
             },
             body: form
         }).then((response) => {
@@ -104,19 +104,31 @@ class Services {
     //pass params and call back function success, error ( post form demo)
     put(url, params, success, error) {
         if (params) {
-            let form = new FormData();
-            for (const key in params) {
-                form.append(key, params[key]);
-            }
+            // let form = new FormData();
+            // for (const key in params) {
+            //     form.append(key, params[key]);
+            // }
+            let body = '';
+            let counter = 0;
 
+            for (const key in params) {
+                if (!counter) {
+                    body = body + key + '=' + params[key];
+                    counter++;
+                    continue;
+                }
+
+                body = body + '&' + key + '=' + params[key];
+            }
             fetch(ApiUrl + url, {
                 method: 'put',
                 headers: {
                     'Accept': 'application/json',
                     //'Content-Type': 'multipart/form-data',
-                    'Authorization': this.token,
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                    'token': this.token,
                 },
-                body: form
+                body: body
             }).then(function (request) {
                 return request.json();
 

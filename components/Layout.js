@@ -1,8 +1,11 @@
 import React from 'react'
 import { Link, browserHistory } from 'react-router'
-
+const user = JSON.parse(localStorage.getItem("authZ")) || null;
+  if (user === null) {
+    browserHistory.push('/login');
+  }
 export default function App({ children }) {
-   const user = JSON.parse(localStorage.getItem("authZ")) || null;
+  
   return (
     <div>
       <header>
@@ -21,10 +24,10 @@ export default function App({ children }) {
             <div id="navbar" className="collapse navbar-collapse">
               <ul className="nav navbar-nav">
                 <li className="active"><Link to="/">Home</Link></li>
-             
+
                 <li className="dropdown">
                   <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-Xin chào: {user.name} <span className="caret"></span>
+                    Xin chào: {user.name || ""} <span className="caret"></span>
                   </a>
                   <ul className="dropdown-menu">
                     <li><a href="/logout">Logout</a></li>
