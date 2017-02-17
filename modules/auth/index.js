@@ -1,8 +1,10 @@
 import Login from './Login';
 import Logout from './Logout';
-//import  ChangePassword from './ChangePassword';
+import Register from './Register';
+// import  ChangePassword from './ChangePassword';
 module.exports = {
     Login,
     Logout,
+    Register,
     //    ChangePassword
 };

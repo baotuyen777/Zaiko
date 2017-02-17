@@ -14,9 +14,9 @@ export const deleteOrder = (id, dispatch, state) => {
     res => dispatch({ type: 'ORDER_DELETE_FAIL', data: res }),
     err => console.log(err));
 }
-export const changeStatusOrder = (params, dispatch, state) => {
+export const changeStatusOrder = (id, params, dispatch, state) => {
   Services.put(
-    entity + "updateStatus/" + params.id,
+    entity + "updateStatus/" + id,
     params,
     res => dispatch({ type: 'ORDER_CHANGE_STATUS_SUCCESS', data: res }),
     res => dispatch({ type: 'ORDER_CHANGE_STATUS_FAIL', data: res }),

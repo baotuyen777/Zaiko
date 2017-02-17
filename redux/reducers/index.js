@@ -4,6 +4,7 @@ import todosList from './todos/todosList'
 import todosFilter from './todos/todosFilter'
 import { login } from './auth';
 import { listProduct } from './product';
+import { listUser } from './user';
 import { listOrder } from './order';
 import { combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux'
@@ -21,6 +22,9 @@ export default combineReducers({
     }),
     order: combineReducers({
         listOrder
+    }),
+    user: combineReducers({
+        listUser
     }),
     routing: routerReducer
 })

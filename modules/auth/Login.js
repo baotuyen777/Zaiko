@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { browserHistory } from 'react-router';
+import { browserHistory, Link } from 'react-router';
 import { connect } from 'react-redux'
 import { sendDataLogin } from '../../redux/actions/auth'
 
@@ -20,13 +20,13 @@ class Login extends Component {
     componentWillReceiveProps(props) {
         const {login} = props.auth
         if (login.type === "LOGIN_SUCCESS") {
-            const {token, data: {id, name, email, image,role,status}} = login.data;
+            const {token, data: {id, name, email, image, role, status}} = login.data;
             this.setState({
                 notice: 'login successfully',
                 color: { color: 'green' }
             });
             if (typeof (Storage) !== "undefined") {
-                let dataStorage = { token, id, email, name, image,role,status }
+                let dataStorage = { token, id, email, name, image, role, status }
                 localStorage.setItem("authZ", JSON.stringify(dataStorage));
             } else {
                 console.error("your browser not support localStorage");
@@ -75,7 +75,8 @@ class Login extends Component {
                     <button type="button" onClick={this.onSubmitLogin.bind(this)} className="btn btn-primary" disabled={this.state.isDisabled}>
                         <i className={this.state.loadingClass}></i> Login</button>
                 </div>
-
+                <Link to="/auth/register">Register</Link><br />
+                <Link to="/auth/register">Fogot password</Link>
             </form>
         );
     }

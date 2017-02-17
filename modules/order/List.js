@@ -10,11 +10,13 @@ const cartDefault = [
 
     }
 ];
+const user = JSON.parse(localStorage.getItem("authZ")) || null;
 class List extends Component {
     constructor(props) {
         super(props)
         this.state = {
             data: null,
+            name: null,
             isLoading: false,
             isDisabled: '',
             cart: cartDefault,
@@ -54,7 +56,7 @@ class List extends Component {
             alert('load data fail');
         }
         //update data
-        if (listProduct.type === "ORDER_CREATE_SUCCESS" || listProduct.type === "ORDER_UPDATE_SUCCESS" || listProduct.type === "ORDER_DELETE_SUCCESS") {
+        if (listProduct.type === "ORDER_CREATE_SUCCESS" || listProduct.type === "ORDER_UPDATE_SUCCESS" || listProduct.type === "ORDER_DELETE_SUCCESS" || listProduct.type === "ORDER_CHANGE_STATUS_SUCCESS") {
             this.props.onGetAllOrder();
             this.setState({
                 cart: [
@@ -85,8 +87,10 @@ class List extends Component {
 
     onChangeStatus(id, e, index) {
         this.props.onChangeStatus({ id, status: e.target.value });
-        this.state.data[index].status = e.target.value;
-        this.setState({ data: this.state.data });
+        // this.state.data[index].status = e.target.value;
+        let params = { status: e.target.value };
+        this.props.onChangeStatus(id, params)
+        // this.setState({ data: this.state.data });
     }
     onSubmit(e) {
         e.preventDefault();
@@ -100,7 +104,7 @@ class List extends Component {
 
                 object[this.state.cart[i]['productId']] = this.state.cart[i];
             } else if (this.state.cart[i]['productId'] == object[this.state.cart[i]['productId']]['productId']) {
-                object[this.state.cart[i]['productId']].quantity += this.state.cart[i].quantity;
+                object[this.state.cart[i]['productId']].quantity = parseInt(object[this.state.cart[i]['productId']].quantity) + parseInt(this.state.cart[i].quantity);
             } else {
                 object[this.state.cart[i]['productId']] = this.state.cart[i];
 
@@ -116,6 +120,7 @@ class List extends Component {
         if (this.state.orderId === null) {
             this.props.onAddOrder(params);
         } else {
+            console.log(params, 222);
             this.props.onUpdateOrder(this.state.orderId, params);
         }
 
@@ -135,29 +140,53 @@ class List extends Component {
         this.setState({ cart: this.state.cart });
     }
     onAddNewOrder() {
-        this.setState({ orderId: null, cart: cartDefault });
+        this.setState({ orderId: null, cart: cartDefault, name: null });
     }
     onUpdate(index, id) {
         if (!id) {
             alert({ notice: 'ID invalid' });
             return;
         }
+        let orderId = this.state.data.data[index].orderId;
+        let cart = this.state.data.data[index].cart;
+        let name = this.state.data.data[index].name;
+        let newCart = [];
+        for (let k in cart) {
+            newCart.push({
+                productId: cart[k]['productId'],
+                quantity: cart[k]['quantity']
+            })
+        }
 
-        let {orderId, cart} = this.state.data.data[index];
-        let order = this.state.data.data[index];
-        // let cart = [
-        //     {
-        //         id: "94",
-        //         name: 'banh gao',
-        //         price: '10000',
-        //         productId: "1",
-        //         quantity: "1"
-        //     }
-        // ];
-        // let orderId = this.state.data.data[index].orderId;
-        this.setState({ cart: order.cart, orderId: order.orderId });
+        this.setState({ cart: newCart, orderId, name });
         // this.setState({ isLoading: true });
     }
+    renderAction(index, orderId, userId) {
+
+        if (user.role === "1" || userId == user.id) {
+            return (
+                <div>
+                    <button onClick={() => this.onDelete(orderId)} className="btn btn-danger"><i className="fa fa-trash" aria-hidden="true"></i></button> &nbsp;
+                    <button onClick={() => this.onUpdate(index, orderId)} className="btn btn-warning"><i className="fa fa-pencil" aria-hidden="true"></i></button>
+                </div>
+            );
+        }
+        // console.log(user.id, userId);
+        // if (userId == user.id) {
+        //     return (
+
+        //     );
+        // }
+    }
+    // renderButtonAdd(orderId, userId) {
+    //     const user = JSON.parse(localStorage.getItem("authZ")) || null;
+    //     console.log( user.id,userId);
+    //     if (userId == user.id) {
+    //         return (
+    //             <button onClick={() => this.onUpdate(index, object.orderId)} className="btn btn-warning"><i className="fa fa-pencil" aria-hidden="true"></i></button>
+    //         );
+    //     }
+    // }
     renderList() {
 
         if (this.state.data === null) {
@@ -180,7 +209,7 @@ class List extends Component {
                         <th>Cart</th>
                         <th>Total</th>
                         <th>Action</th>
-                        <th>Payment Status</th>
+                        <th width="17%">Payment Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -197,8 +226,7 @@ class List extends Component {
                                 {object.total}
                             </td>
                             <td>
-                                <button onClick={() => this.onDelete(object.orderId)} className="btn btn-danger"><i className="fa fa-trash" aria-hidden="true"></i></button> &nbsp;
-                                <button onClick={() => this.onUpdate(index, object.orderId)} className="btn btn-warning"><i className="fa fa-pencil" aria-hidden="true"></i></button>
+                                {this.renderAction(index, object.orderId, object.userId)}
                             </td>
                             <td>
                                 <select value={object.status} onChange={(e) => this.onChangeStatus(object.orderId, e, index)} className="form-control" >
@@ -234,7 +262,7 @@ class List extends Component {
                 <table className="table table-bordered">
                     <thead>
                         <tr>
-                            <th>Product</th>
+                            <th>Product {this.state.name !== null ? "(" + this.state.name + ")" : "(Add new)"} {this.renderButtonAdd()}</th>
                             <th>Quantity</th>
                         </tr>
                     </thead>
@@ -280,17 +308,25 @@ class List extends Component {
             );
         }
     }
+    renderButtonAdd() {
+        if (this.state.orderId !== null) {
+            return (
+                <button className="btn btn-warning" onClick={() => this.onAddNewOrder()}>
+                    <i className="fa fa-times" aria-hidden="true"></i> Cancel</button>
+            );
+        }
+    }
     render() {
-
+        // {this.state.isLoading ? "" : "hidden"}
         return (
-            <div>
+            <div className="relative">
+                <div className="loading "></div>
                 <div className="container">
                     <div className="row">
                         <div className="col-md-12" >
                             <h1 className="text-center">Order</h1>
                             <div className="action">
-                                <button className="btn btn-success" onClick={() => this.onAddNewOrder()}>
-                                    <i className="fa fa-plus" aria-hidden="true"></i> Add new </button>
+
                             </div>
                         </div>
 
@@ -318,7 +354,7 @@ function mapDispatchToProps(dispatch) {
         onGetAllOrder: (params) => dispatch(getAllOrder.bind(null, params)),
         onAddOrder: (params) => dispatch(addOrder.bind(null, params)),
         onDelele: (params) => dispatch(deleteOrder.bind(null, params)),
-        onChangeStatus: (params) => dispatch(changeStatusOrder.bind(null, params)),
+        onChangeStatus: (id, params) => dispatch(changeStatusOrder.bind(null, id, params)),
         onUpdateOrder: (id, params) => dispatch(updateOrder.bind(null, id, params)),
         onGetAllProduct: (params) => dispatch(getAllProduct.bind(null, params)),
     }
