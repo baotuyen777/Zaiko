@@ -16,4 +16,11 @@ export const sendDataLogin = (email, password, dispatch, state) => {
 export const doLogout = (dispatch, state) => {
   dispatch({ type: 'DO_LOGOUT' })
 }
-
+export const register = (params, dispatch, state) => {
+  Services.post(
+    entity + '/register',
+    params,
+    res => dispatch({ type: 'REGISTER_SUCCESS', data: res }),
+    res => dispatch({ type: 'REGISTER_FAIL', data: res }),
+    err => console.log(err));
+}

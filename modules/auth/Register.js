@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { addUser } from '../../redux/actions/user'
+import { register } from '../../redux/actions/auth'
 import { browserHistory } from 'react-router';
+
+
 class Register extends Component {
     constructor(props) {
         super(props)
@@ -12,6 +14,8 @@ class Register extends Component {
             isLoading: false,
             isEdit: ''
         }
+
+
     }
     componentWillMount() {
         let params = {
@@ -22,8 +26,12 @@ class Register extends Component {
     }
     componentWillReceiveProps(props) {
         const {listUser} = props.user;
-        if (listUser.type === "USER_ADD_SUCCESS") {
-            browserHistory.push('/order');
+        if (listUser.type === "REGISTER_SUCCESS") {
+            // browserHistory.push('/login');
+        }
+        if (listUser.type === "REGISTER_FAIL") {
+            var toast = new iqwerty.toast.Toast();
+            toast.setText(listUser.data.message).show();
         }
 
         // if (listUser.type === "USER_ALL_FAIL") {
@@ -48,7 +56,7 @@ class Register extends Component {
             return;
         }
         delete this.state.object.rePassword;
-        this.props.onAddUser(this.state.object);
+        this.props.onRegister(this.state.object);
         console.log(this.state.object)
     }
 
@@ -69,33 +77,33 @@ class Register extends Component {
         return (
             <div>
 
-                <form className="form-horizontal" onSubmit={(e) => this.onSubmit(e)}>
+                <form className="form-horizontal" onSubmit={(e) => this.onSubmit(e) }>
                     <div className="form-group">
-                        <label className="control-label col-sm-2">Name:</label>
+                        <label className="control-label col-sm-2">Name: </label>
                         <div className="col-sm-10">
                             <input name='name' type="text" className="form-control"
-                                onChange={(e) => this.onChangeObject(e)} />
+                                onChange={(e) => this.onChangeObject(e) } />
                         </div>
                     </div>
                     <div className="form-group">
-                        <label className="control-label col-sm-2">Email:</label>
+                        <label className="control-label col-sm-2">Email: </label>
                         <div className="col-sm-10">
                             <input name='email' type="email" className="form-control"
-                                onChange={(e) => this.onChangeObject(e)} />
+                                onChange={(e) => this.onChangeObject(e) } />
                         </div>
                     </div>
                     <div className="form-group">
-                        <label className="control-label col-sm-2">Pasword:</label>
+                        <label className="control-label col-sm-2">Pasword: </label>
                         <div className="col-sm-10">
                             <input name='password' type="password" className="form-control"
-                                onChange={(e) => this.onChangeObject(e)} />
+                                onChange={(e) => this.onChangeObject(e) } />
                         </div>
                     </div>
                     <div className="form-group">
-                        <label className="control-label col-sm-2">Retype password:</label>
+                        <label className="control-label col-sm-2">Retype password: </label>
                         <div className="col-sm-10">
                             <input name='rePassword' type="password" className="form-control"
-                                onChange={(e) => this.onChangeObject(e)} />
+                                onChange={(e) => this.onChangeObject(e) } />
                         </div>
                     </div>
 
@@ -117,8 +125,8 @@ class Register extends Component {
                 <div className="container">
 
                     <h1 className="text-center">Register</h1>
-                 
-                    {this.renderForm(this)}
+
+                    {this.renderForm(this) }
                 </div>
             </div>
         )
@@ -126,7 +134,7 @@ class Register extends Component {
 }
 function mapDispatchToProps(dispatch) {
     return {
-        onAddUser: (params) => dispatch(addUser.bind(null, params)),
+        onRegister: (params) => dispatch(register.bind(null, params)),
     }
 }
 
