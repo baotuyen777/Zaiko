@@ -18,9 +18,7 @@ class Add extends Component {
     }
     componentWillMount() {
         let params = {
-            // date:
         }
-        console.log(this.props)
         // this.props.onGetAllProduct(params);
     }
     componentWillReceiveProps(props) {

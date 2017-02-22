@@ -3,6 +3,13 @@ import { browserHistory } from 'react-router';
 import { connect } from 'react-redux'
 import { getAllOrder, deleteOrder, changeStatusOrder, addOrder, updateOrder } from '../../redux/actions/order'
 import { getAllProduct } from '../../redux/actions/product';
+// import 'react-date-picker/index.css';
+// import { DateField, Calendar } from 'react-date-picker'
+
+// const onChange = (dateString, { dateMoment, timestamp }) => {
+//     console.log(dateString)
+// }
+// import { moment } from 'moment';
 const cartDefault = [
     {
         productId: "",
@@ -258,53 +265,57 @@ class List extends Component {
     }
     renderForm() {
         if (this.state.listProduct !== null) {
+           
             return (
-                <table className="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Product {this.state.name !== null ? "(" + this.state.name + ")" : "(Add new)"} {this.renderButtonAdd()}</th>
-                            <th>Quantity</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            this.state.cart.map((product, index) =>
-                                <tr key={index}>
-                                    <td width="60%">
-                                        <select className="form-control" onChange={(e) => this.onChageCart(e, index)} name="productId" value={product.productId}>
-                                            <option value="" >Please choose product</option>
-                                            {this.state.listProduct.map((product, index) =>
-                                                <option key={index} value={product.id} >{product.name} ({product.price})</option>
-                                            )}
-                                        </select>
-                                    </td>
-                                    <td width="20%">
-                                        <input type="number" value={product.quantity} name={product.productId} name="quantity"
-                                            onChange={(e) => this.onChageCart(e, index)}
-                                            className="form-control" id="quantity" placeholder="Quantity" />
-                                    </td>
+                <div>
+                  
+                    <table className="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Product {this.state.name !== null ? "(" + this.state.name + ")" : "(Add new)"} {this.renderButtonAdd()}</th>
+                                <th>Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                this.state.cart.map((product, index) =>
+                                    <tr key={index}>
+                                        <td width="60%">
+                                            <select className="form-control" onChange={(e) => this.onChageCart(e, index)} name="productId" value={product.productId}>
+                                                <option value="" >Please choose product</option>
+                                                {this.state.listProduct.map((product, index) =>
+                                                    <option key={index} value={product.id} >{product.name} ({product.price})</option>
+                                                )}
+                                            </select>
+                                        </td>
+                                        <td width="20%">
+                                            <input type="number" value={product.quantity} name={product.productId} name="quantity"
+                                                onChange={(e) => this.onChageCart(e, index)}
+                                                className="form-control" id="quantity" placeholder="Quantity" />
+                                        </td>
 
-                                </tr>
-                            )
-                        }
-                        <tr>
-                            <td colSpan="2">
-                                <button className="btn btn-success" style={{ float: "right" }} onClick={this.onAddRowCart.bind(this)}><i className="fa fa-plus"></i> Add row</button> &nbsp;
+                                    </tr>
+                                )
+                            }
+                            <tr>
+                                <td colSpan="2">
+                                    <button className="btn btn-success" style={{ float: "right" }} onClick={this.onAddRowCart.bind(this)}><i className="fa fa-plus"></i> Add row</button> &nbsp;
                                 <button className="btn btn-danger" onClick={e => this.onDelRowCard()}><i className="fa fa-trash"></i> Del row</button>
-                            </td>
+                                </td>
 
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colSpan="3" style={{ textAlign: "center" }}>
-                                <button type="button" style={{ width: "100%" }} onClick={this.onSubmit.bind(this)} className="btn btn-primary">
-                                    <i className={this.state.loadingSubmitClass}></i>Submit</button>
-                            </td>
-                        </tr>
-                    </tfoot>
-                </table>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colSpan="3" style={{ textAlign: "center" }}>
+                                    <button type="button" style={{ width: "100%" }} onClick={this.onSubmit.bind(this)} className="btn btn-primary">
+                                        <i className={this.state.loadingSubmitClass}></i>Submit</button>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
 
+                </div>
             );
         }
     }

@@ -24,3 +24,20 @@ export const register = (params, dispatch, state) => {
     res => dispatch({ type: 'REGISTER_FAIL', data: res }),
     err => console.log(err));
 }
+export const resetPassword1 = (params, dispatch, state) => {
+  Services.post(
+    entity + '/resetPassword1',
+    params,
+    res => dispatch({ type: 'RESET_PASSWORD1_SUCCESS', data: res }),
+    res => dispatch({ type: 'RESET_PASSWORD1_FAIL', data: res }),
+    err => console.log(err));
+}
+export const resetPassword2 = (params, dispatch, state) => {
+  Services.post(
+    entity + '/resetPassword2',
+    params,
+    res => dispatch({ type: 'RESET_PASSWORD2_SUCCESS', data: res }),
+    res => dispatch({ type: 'RESET_PASSWORD2_FAIL', data: res }),
+    err => console.log(err));
+}
+

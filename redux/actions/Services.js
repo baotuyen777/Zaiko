@@ -1,7 +1,7 @@
 import 'whatwg-fetch';
 // import ApiUrl from './ApiUrl'
 //contain common service 
-const ApiUrl = 'http://192.168.1.87/nanoAPI/';
+const ApiUrl = 'http://192.168.2.87/nanoAPI/';
 class Services {
     constructor(url) {
         this.serviceUrl = url;

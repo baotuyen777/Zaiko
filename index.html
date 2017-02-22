@@ -16,6 +16,7 @@
     <!--<link href="public/css/bootstrap.min.css" rel="stylesheet">-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="http://fontawesome.io/assets/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <!-- Custom styles for this template -->
     <style>
         html {
@@ -51,17 +52,23 @@
 
 <body>
     <div id="root"></div>
-    <script src="/static/bundle.js"></script>
-
-
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
-    <script src="http://www.cssscript.com/demo/super-simple-javascript-message-toaster-toast-js/toast.js"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
     <script>
-        
-        </script>
+        var barseUrl = "http://localhost:3000";
+    </script>
+<script src="/static/bundle.js"></script>
+
+
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
+<script src="http://www.cssscript.com/demo/super-simple-javascript-message-toaster-toast-js/toast.js"></script>
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+        $(function () {
+            $("#datepicker").datepicker();
+        });
+</script>
 </body>
 
 </html>

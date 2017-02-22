@@ -43,6 +43,7 @@ class Login extends Component {
         this.setState({ loadingClass: '', isDisabled: '' });
     }
     onSubmitLogin(e) {
+        e.preventDefault();
         const {email, password} = this.state;
         this.setState({ notice: '' });
         if (!email.trim() || !password.trim()) {
@@ -58,7 +59,7 @@ class Login extends Component {
             return null;
         }
         return (
-            <form className="form-horizontal">
+            <form className="form-horizontal" onSubmit={e => this.onSubmitLogin(e)}>
                 <div className="form-group">
                     <label htmlFor="exampleInputEmail1">Email:</label>
                     <input type="email" className="form-control" id="exampleInputEmail1" placeholder="Email" value={this.state.email}
@@ -72,11 +73,12 @@ class Login extends Component {
                         />
                 </div>
                 <div className="form-group">
-                    <button type="button" onClick={this.onSubmitLogin.bind(this)} className="btn btn-primary" disabled={this.state.isDisabled}>
+                    <button type="" className="btn btn-primary" disabled={this.state.isDisabled}>
                         <i className={this.state.loadingClass}></i> Login</button>
                 </div>
-                <Link to="/auth/register">Register</Link><br />
-                <Link to="/auth/register">Fogot password</Link>
+                <div className="form-group">
+                    <Link to="/auth/register">Register</Link> - <Link to="/auth/reset-password-step1">Fogot password?</Link>
+                </div>
             </form>
         );
     }
@@ -84,9 +86,12 @@ class Login extends Component {
         return (
             <div>
                 <div className="container">
+                    <h1 className="text-center">Login</h1>
+                    <hr />
                     <div className="row">
                         <div className="col-md-4 col-md-offset-4">
-                            <h1 className="text-center">Login</h1>
+
+
                             <p style={this.state.color}>{this.state.notice}</p>
                             {this.renderFormLogin(this.state.isLoged)}
                         </div>
