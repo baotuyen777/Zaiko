@@ -31,7 +31,7 @@ class Login extends Component {
             } else {
                 console.error("your browser not support localStorage");
             }
-            browserHistory.push('/product/list');
+            browserHistory.push('/order');
         }
 
         if (login.type === "LOGIN_FAIL") {

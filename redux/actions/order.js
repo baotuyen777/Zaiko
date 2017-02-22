@@ -2,7 +2,7 @@ import Services from './Services'
 let entity = 'extra/order/';
 export const getAllOrder = (param, dispatch, state) => {
   Services.get(
-    entity,
+    entity + '?date=' + param.date,
     res => dispatch({ type: 'ORDER_ALL_SUCCESS', data: res }),
     res => dispatch({ type: 'ORDER_ALL_FAIL', data: res }),
     err => console.log(err));

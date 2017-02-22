@@ -5,9 +5,10 @@ import todosFilter from './todos/todosFilter'
 import { login } from './auth';
 import { listProduct } from './product';
 import { listUser } from './user';
-import { listOrder } from './order';
+// import { listOrder } from './order';
 import { combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux'
+
 export default combineReducers({
 
     todos: combineReducers({
@@ -21,10 +22,17 @@ export default combineReducers({
         listProduct
     }),
     order: combineReducers({
-        listOrder
+        listOrder(state = {}, action) {
+            return action;
+        }
     }),
     user: combineReducers({
         listUser
+    }),
+    date: combineReducers({
+        listDate(state = {}, action) {
+            return action;
+        }
     }),
     routing: routerReducer
 })
