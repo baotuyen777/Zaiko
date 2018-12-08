@@ -39,10 +39,8 @@ class List extends Component {
             date: this.state.currentDateOrder
         }
         this.props.onGetAllProduct({});
-        this.props.onGetAllOrder(params);
-        if (user.role === "2") {
-            this.props.onGetAllDate({});
-        }
+        this.props.onGetAllOrder();
+       
 
     }
     componentWillReceiveProps(props) {
@@ -247,11 +245,9 @@ class List extends Component {
                 </div>
             );
         }
-        let date = new Date(this.state.currentDateOrder);
-        let currentDate = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+        
         return (
             <div>
-                <p>order date: {currentDate}</p>
                 <table className="table table-bordered">
                     <thead>
                         <tr>
@@ -303,30 +299,30 @@ class List extends Component {
 
     }
 
-    renderCalendar() {
-        if (this.state.listDate === null) {
-            return (
-                <div >
-                    <center >
-                        <div className="loading">
-                            <i className="fa-spin fa fa-cog" aria-hidden="true"></i>
-                        </div>
-                    </center>
-                </div>
-            );
-        }
-        return (
-            <div className="calendar">
-                <div className="cHeader"><a className="btn">prev</a> November <a className="btn">next</a></div>
-                <div className="cContent">
-                    {this.state.listDate.data.map((date, index) =>
-                        <span key={index} onClick={e => this.onChooseDay(date.date)} className={date.status == 1 ? "dateActice" : ""}>{this.getDay(date.date)}</span>
-                    )}
-                </div>
+    // renderCalendar() {
+    //     if (this.state.listDate === null) {
+    //         return (
+    //             <div >
+    //                 <center >
+    //                     <div className="loading">
+    //                         <i className="fa-spin fa fa-cog" aria-hidden="true"></i>
+    //                     </div>
+    //                 </center>
+    //             </div>
+    //         );
+    //     }
+    //     return (
+    //         <div className="calendar">
+    //             <div className="cHeader"><a className="btn">prev</a> November <a className="btn">next</a></div>
+    //             <div className="cContent">
+    //                 {this.state.listDate.data.map((date, index) =>
+    //                     <span key={index} onClick={e => this.onChooseDay(date.date)} className={date.status == 1 ? "dateActice" : ""}>{this.getDay(date.date)}</span>
+    //                 )}
+    //             </div>
 
-            </div>
-        );
-    }
+    //         </div>
+    //     );
+    // }
     renderForm() {
         if (this.state.data !== null && !this.state.data.dateStatus) {
             return (
@@ -410,19 +406,21 @@ class List extends Component {
                             <h1 className="text-center">Order</h1>
                             <div className="action">
                                 <button className="btn btn-primary" onClick={e => this.onChangeStatusDate()}> Change Status </button>
+                                
+                                <button className="btn btn-success" onClick={() => browserHistory.push('/order/add') }>
+                            <i className="fa fa-plus" aria-hidden="true"></i> Add new </button>
                             </div>
                         </div>
 
-                        <div className="col-md-8">
                             {this.renderList(this)}
-                        </div>
+                 
                         {/* sidebar  */}
-                        <div className="col-md-4">
+                        {/* <div className="col-md-4">
                             <p> &nbsp;</p>
                             {this.renderCalendar()}
                             <div className="error">{this.state.notice}</div>
                             {this.renderForm(this)}
-                        </div>
+                        </div> */}
 
                     </div>
 

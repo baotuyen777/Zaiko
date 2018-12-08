@@ -1,19 +1,22 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getAllProduct, deleteProduct, createProduct } from '../../redux/actions/product'
+import { getAllProduct, deleteProduct } from '../../redux/actions/product'
+import { createOrder } from '../../redux/actions/order'
+import { browserHistory, Link } from 'react-router';
 
 class Add extends Component {
     constructor(props) {
         super(props)
         this.state = {
             object: {
-                name: '',
-                price: ''
+                note: '',
+                product_id: '',
+                cart: null
             },
-            file: '',
+            listProduct: false,
             imagePreviewUrl: '',
             isLoading: false,
-            isEdit: ''
+            isEdit: '',
         }
     }
     componentWillMount() {
@@ -21,15 +24,20 @@ class Add extends Component {
             // date:
         }
         console.log(this.props)
-        // this.props.onGetAllProduct(params);
+        this.props.onGetAllProduct(params);
     }
     componentWillReceiveProps(props) {
-        const {listProduct} = props.product;
+        const { listProduct } = props.product;
+        const { listOrder } = props.order;
+        
         if (listProduct.type === "PRODUCT_ALL_SUCCESS") {
             this.setState({
-                data: listProduct.data.data.data,
+                listProduct: listProduct.data.data,
             });
-
+        }
+        console.log(listOrder.type,55)
+        if (listOrder.type === "ORDER_CREATE_SUCCESS") {
+            browserHistory.push('/order');
         }
 
         // if (listProduct.type === "PRODUCT_ALL_FAIL") {
@@ -44,32 +52,28 @@ class Add extends Component {
     }
     onSubmit(e) {
         e.preventDefault();
-        let {name, price, category, description, img} = this.state.object;
-        if (!name || !price || !category || !description || !img) {
+        let { note, product_id } = this.state.object;
+        if (!note || !product_id) {
             alert('data not null');
             return;
         }
+        let date = new Date();
+        let currentDate = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+        this.state.object.cart = JSON.stringify([{
+            product_id,
+            quantity: 1,
+        }]);
+        this.state.object.date = currentDate;
         this.props.onCreate(this.state.object);
-        console.log(this.state.object)
     }
-
-    onChangeImage(e) {
-        e.preventDefault();
-
-        let reader = new FileReader();
-        let file = e.target.files[0];
-        console.log(file.name);
-        reader.onloadend = () => {
-            this.setState({
-                file: file,
-                imagePreviewUrl: reader.result
-            });
+    renderProduct() {
+        if (this.state.listProduct) {
+            return (
+                this.state.listProduct.map((object, index) =>
+                    <option key={index} value={object.id}>{object.name}</option>
+                )
+            );
         }
-        let object = this.state.object;
-        object[e.target.name] = file.name
-        this.setState({ object });
-
-        reader.readAsDataURL(file)
     }
     renderForm() {
 
@@ -85,63 +89,27 @@ class Add extends Component {
             );
         }
         //   {this.notice(this.state.updateStatus, this.state.noticeText)}
-        let {name, price, category, description, img} = this.state.object;
-        let {imagePreviewUrl} = this.state;
-        let $imagePreview = null;
-        if (imagePreviewUrl) {
-            $imagePreview = (<img style={{ height: 100 }} src={imagePreviewUrl} />);
-        }
+        let { note, product_id } = this.state.object;
         return (
             <div>
 
                 <form className="form-horizontal" onSubmit={(e) => this.onSubmit(e)}>
                     <div className="form-group">
-                        <label className="control-label col-sm-2">Name:</label>
+                        <label className="control-label col-sm-2" >Product:</label>
                         <div className="col-sm-10">
-                            <input name='name' type="text" className="form-control" placeholder="Name"
-                                value={name} onChange={(e) => this.onChange(e)} />
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <label className="control-label col-sm-2">Price:</label>
-                        <div className="col-sm-10">
-                            <input name='price' type="number" className="form-control" placeholder="Price"
-                                value={price} onChange={(e) => this.onChange(e)}
-                                />
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <label className="control-label col-sm-2" >Category:</label>
-                        <div className="col-sm-10">
-                            <select name="category" className="form-control"
-                                value={category} onChange={(e) => this.onChange(e)}
-                                >
-                                <option value={1}>1</option>
-                                <option value={2}>2</option>
+                            <select name="product_id" className="form-control"
+                                value={product_id} onChange={(e) => this.onChange(e)}
+                            >
+                                <option value="">Please choose 1 product</option>
+                                {this.renderProduct(this)}
                             </select>
                         </div>
                     </div>
                     <div className="form-group">
                         <label className="control-label col-sm-2">Description:</label>
                         <div className="col-sm-10">
-                            <textArea name="description" className="form-control"
-                                onChange={(e) => this.onChange(e)}>{description}</textArea>
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <label className="control-label col-sm-2" >Image :</label>
-                        <div className="col-sm-10">
-                            <input type="file" name='img' className="form-control" onChange={(e) => this.onChangeImage(e)} />
-                            <div >
-                                {$imagePreview}
-                            </div>
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <div className="col-sm-offset-2 col-sm-10">
-                            <div className="checkbox">
-                                <label><input type="checkbox" /> Activate   </label>
-                            </div>
+                            <textArea name="note" className="form-control" value={note}
+                                onChange={(e) => this.onChange(e)} />
                         </div>
                     </div>
                     <div className="form-group">
@@ -174,7 +142,7 @@ function mapDispatchToProps(dispatch) {
         onSendDataLogin: (email, password) => dispatch(sendDataLogin.bind(null, email, password)),
         onGetAllProduct: (params) => dispatch(getAllProduct.bind(null, params)),
         onDelele: (params) => dispatch(deleteProduct.bind(null, params)),
-        onCreate: (params) => dispatch(createProduct.bind(null, params)),
+        onCreate: (params) => dispatch(createOrder.bind(null, params)),
     }
 }
 
@@ -182,6 +150,7 @@ export default connect(
     (state, ownProps) => ({
         auth: state.auth,
         product: state.product,
+        order: state.order,
     })
     ,
     mapDispatchToProps

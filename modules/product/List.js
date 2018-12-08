@@ -29,9 +29,14 @@ class List extends Component {
             });
 
         }
-
         if (listProduct.type === "PRODUCT_ALL_FAIL") {
             alert('load data fail');
+        }
+        if (listProduct.type === "PRODUCT_DELETE_SUCCESS") {
+            this.props.onGetAllProduct(this.state.object);
+            // this.setState({
+            //     data: listProduct.data.data,
+            // });
         }
         this.setState({ isLoading: false });
     }
@@ -71,7 +76,7 @@ class List extends Component {
                 <tbody>
                     {this.state.data.map((object, index) =>
                         <tr key={index}>
-                            <td>{index}</td>
+                            <td>{index+1}</td>
                             <td>{object.name}</td>
                             <td>{object.price}</td>
                             <td><button onClick={() => this.onDelete(object.id) }><i className="fa fa-trash" aria-hidden="true"></i></button></td>

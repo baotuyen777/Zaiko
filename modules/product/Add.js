@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { getAllProduct, deleteProduct, createProduct } from '../../redux/actions/product'
+import { browserHistory, Link } from 'react-router';
 
 class Add extends Component {
     constructor(props) {
@@ -29,7 +30,10 @@ class Add extends Component {
             });
 
         }
-
+        if(listProduct.data.status){
+            browserHistory.push('/product');
+        }
+console.log(props.product);
         // if (listProduct.type === "PRODUCT_ALL_FAIL") {
         //     alert('load data fail');
         // }
@@ -42,13 +46,12 @@ class Add extends Component {
     }
     onSubmit(e) {
         e.preventDefault();
-        let {name, price, category, description, img} = this.state.object;
-        if (!name || !price || !category || !description || !img) {
-            alert('data not null');
+        let {name, price, category, description, image} = this.state.object;
+        if (!name || !price ) {
+            alert('name, price not null');
             return;
         }
         this.props.onCreate(this.state.object);
-        console.log(this.state.object)
     }
 
     onChangeImage(e) {
@@ -56,7 +59,6 @@ class Add extends Component {
 
         let reader = new FileReader();
         let file = e.target.files[0];
-        console.log(file.name);
         reader.onloadend = () => {
             this.setState({
                 file: file,
@@ -83,7 +85,7 @@ class Add extends Component {
             );
         }
         //   {this.notice(this.state.updateStatus, this.state.noticeText)}
-        let {name, price, category, description, img} = this.state.object;
+        let {name,slug, price, category, description, image} = this.state.object;
         let {imagePreviewUrl} = this.state;
         let $imagePreview = null;
         if (imagePreviewUrl) {
@@ -98,6 +100,13 @@ class Add extends Component {
                         <div className="col-sm-10">
                             <input name='name' type="text" className="form-control" placeholder="Name"
                                 value={name} onChange={(e) => this.onChange(e)} />
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label className="control-label col-sm-2">Slug:</label>
+                        <div className="col-sm-10">
+                            <input name='slug' type="text" className="form-control" placeholder="Slug"
+                                value={slug} onChange={(e) => this.onChange(e)} />
                         </div>
                     </div>
                     <div className="form-group">
@@ -129,7 +138,7 @@ class Add extends Component {
                     <div className="form-group">
                         <label className="control-label col-sm-2" >Image :</label>
                         <div className="col-sm-10">
-                            <input type="file" name='img' className="form-control" onChange={(e) => this.onChangeImage(e)} />
+                            <input type="file" name='image' className="form-control" onChange={(e) => this.onChangeImage(e)} />
                             <div >
                                 {$imagePreview}
                             </div>

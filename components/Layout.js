@@ -73,7 +73,7 @@ export default class Layout extends Component {
         </main>
         <footer className="footer">
           <div className="container">
-            <p className="text-muted">Place sticky footer content here.</p>
+            <p className="text-muted">@copy right david.</p>
           </div>
         </footer>
       </div>
